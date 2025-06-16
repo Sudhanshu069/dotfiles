@@ -1,0 +1,177 @@
+#----------------------------------------------------------------#
+# 1. BASIC SETUP & VARIABLES
+#----------------------------------------------------------------#
+
+# Set the modifier key to the Super/Windows key.
+# Use Mod1 for the Alt key.
+set $mod Mod4
+
+# Set preferred applications
+set $terminal alacritty
+set $launcher "rofi -show drun"
+
+#----------------------------------------------------------------#
+# 2. AESTHETICS (FONTS, GAPS, BORDERS)
+#----------------------------------------------------------------#
+
+# Set the font for window titles.
+# pango: allows for more advanced font rendering and icons.
+font pango:JetBrains Mono Nerd Font 12
+
+# Set gaps between windows
+gaps inner 12  # Space between adjacent windows
+gaps outer 6   # Space between windows and the edge of the screen
+
+# Enable smart gaps (gaps are removed when there's only one window)
+smart_gaps on
+
+# Set window border style
+default_border pixel 2
+default_floating_border pixel 2
+
+# Hide borders on windows that don't need them
+hide_edge_borders --i3 smart
+
+#----------------------------------------------------------------#
+# 3. THEME (CATPPUCCIN MOCHA)
+#----------------------------------------------------------------#
+
+# Window border colors
+#                   border  background text    indicator child_border
+set $bg-color       #1e1e2e
+set $inactive-text  #6c7086
+set $inactive-bg    #313244
+set $active-text    #cdd6f4
+set $active-bg      #1e1e2e
+set $urgent-bg      #f38ba8
+set $focused-border #cba6f7
+set $unfocused-border #45475a
+
+# --- Window Colors ---
+# class                 border        background    text          indicator     child_border
+client.focused          $focused-border $active-bg    $active-text  $focused-border $focused-border
+client.unfocused        $unfocused-border $inactive-bg  $inactive-text $unfocused-border $unfocused-border
+client.focused_inactive $unfocused-border $inactive-bg  $inactive-text $unfocused-border $unfocused-border
+client.urgent           $urgent-bg      $urgent-bg    $active-text  $urgent-bg      $urgent-bg
+
+#----------------------------------------------------------------#
+# 4. KEYBINDINGS
+#----------------------------------------------------------------#
+
+# --- Application Shortcuts ---
+# Launch a terminal
+bindsym $mod+Return exec $terminal
+
+# Kill a focused window
+bindsym $mod+Shift+q kill
+
+# Launch your application launcher (Rofi)
+bindsym $mod+space exec $launcher
+
+# --- Window Navigation ---
+# Change focus (like Alt+Tab)
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+h focus left
+
+# Alternatively, you can use arrow keys
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# --- Moving Windows ---
+# Move the focused window
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move left
+bindsym $mod+Shift+h move right
+
+# Move with arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# --- Layout Control ---
+# Split in horizontal orientation
+bindsym $mod+h split h
+
+# Split in vertical orientation
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused window
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling/floating for a window
+bindsym $mod+Shift+space floating toggle
+
+# --- Workspace Navigation ---
+# Define variables for workspaces
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+# ...and so on for as many as you need
+
+# Switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+
+# --- System Control ---
+# Reload the i3 configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (useful for upgrades)
+bindsym $mod+Shift+r restart
+
+# Exit i3 session (logs you out)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+#----------------------------------------------------------------#
+# 5. AUTOSTART APPLICATIONS
+#----------------------------------------------------------------#
+
+# Compositor (for transparency, animations, etc.)
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
+
+# Status bar (we will create this script in the next step)
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# Notification daemon
+exec_always --no-startup-id dunst
+
+# Network Manager Applet (for managing Wi-Fi, etc.)
+exec_always --no-startup-id nm-applet
+
+# Set your wallpaper (install 'feh' first: sudo pacman -S feh)
+# Replace with the actual path to your wallpaper.
+exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/your-wallpaper.png
+
+# Disable i3's default status bar
+bar {
+    status_command i3status
+    # Hiding the bar by setting mode to dock and then to hide
+    mode dock
+    modifier None
+    hidden_state hide
+}
+
+
