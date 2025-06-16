@@ -30,7 +30,7 @@ default_border pixel 2
 default_floating_border pixel 2
 
 # Hide borders on windows that don't need them
-hide_edge_borders --i3 smart
+hide_edge_borders smart
 
 #----------------------------------------------------------------#
 # 3. THEME (CATPPUCCIN MOCHA)
@@ -96,7 +96,7 @@ bindsym $mod+Shift+Right move right
 
 # --- Layout Control ---
 # Split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+b split h 
 
 # Split in vertical orientation
 bindsym $mod+v split v
