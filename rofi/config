@@ -1,0 +1,33 @@
+/**
+ * Rofi configuration (classic format for compatibility)
+ */
+
+// Modi (modes) to use
+rofi.modi:                       window,drun,run,calc
+
+// Font
+rofi.font:                       JetBrains Mono Nerd Font 12
+
+// Icons
+rofi.show-icons:                 true
+rofi.icon-theme:                 Papirus-Dark
+rofi.terminal:                   alacritty
+
+// Drun mode settings
+rofi.drun-display-format:        {icon} {name}
+rofi.drun-match-fields:          name,generic,exec,categories
+
+// Window mode settings
+rofi.window-format:              [{w}] {c} {t}
+
+// Keybindings
+rofi.kb-cancel:                  Escape
+rofi.kb-accept-entry:            Return,Control+m
+rofi.kb-mode-next:               Shift+Right,Control+Tab
+rofi.kb-mode-previous:           Shift+Left,Control+Shift+Tab
+
+/*
+ * Tell Rofi where to find our beautiful theme file.
+ * This is the most important part.
+ */
+rofi.theme: /home/i3-work/.config/rofi/theme.rasi

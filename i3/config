@@ -16,14 +16,14 @@ set $launcher "rofi -show drun"
 
 # Set the font for window titles.
 # pango: allows for more advanced font rendering and icons.
-font pango:JetBrains Mono Nerd Font 12
+font pango:JetBrainsMono Nerd Font 11
 
 # Set gaps between windows
-gaps inner 12px  # Space between adjacent windows
-gaps outer 6px   # Space between windows and the edge of the screen
+gaps inner 6
+gaps outer 6
 
 # Enable smart gaps (gaps are removed when there's only one window)
-smart_gaps off 
+smart_gaps off
 
 # Set window border style
 default_border pixel 2
@@ -93,7 +93,7 @@ bindsym $mod+Shift+Right move right
 
 # --- Layout Control ---
 # Split in horizontal orientation
-bindsym $mod+b split b 
+bindsym $mod+b split h 
 
 # Split in vertical orientation
 bindsym $mod+v split v
@@ -110,13 +110,11 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # --- Workspace Navigation ---
-# Define variables for workspaces
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
-# ...and so on for as many as you need
 
 # Switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -133,19 +131,8 @@ bindsym $mod+Shift+4 move container to workspace number $ws4
 bindsym $mod+Shift+5 move container to workspace number $ws5
 
 # Rofi Modi Keybindings
-
-# App Launcher (drun)
-# This replaces the old binding for $mod+d
-bindsym $mod+space exec rofi -show drun
-
-# Window Switcher
-bindsym $mod+Tab exec rofi -show window
-
-# Power Menu
+bindsym $mod+d exec /home/i3-work/.config/rofi/scripts/launcher.sh
 bindsym $mod+x exec ~/.config/rofi/scripts/powermenu.sh
-
-# Calculator
-bindsym $mod+c exec rofi -show calc
 
 # --- System Control ---
 # Reload the i3 configuration file
@@ -156,6 +143,28 @@ bindsym $mod+Shift+r restart
 
 # Exit i3 session (logs you out)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Flameshot Keybindings
+
+# PrintScreen launches the interactive GUI
+# -p: saves the image to the default path we configured
+# -c: copies the image to the clipboard
+bindsym Print exec flameshot gui -p ~/Screenshots -c
+
+# Shift+PrintScreen captures the entire screen without the GUI
+bindsym Shift+Print exec flameshot full -p ~/Screenshots -c
+
+# $mod+PrintScreen captures the screen with a 5-second delay
+bindsym $mod+Print exec flameshot full -d 5000 -p ~/Screenshots -c
+
+# Toggle Redshift (Night Mode)
+bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/scripts/toggle-redshift.sh
+
+# Enter resize mode
+bindsym $mod+r mode "resize"
+
+# Show current song notification
+bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/show-music.sh
 
 #----------------------------------------------------------------#
 # 5. AUTOSTART APPLICATIONS
@@ -175,5 +184,57 @@ exec_always --no-startup-id nm-applet
 
 # Set your wallpaper (install 'feh' first: sudo pacman -S feh)
 # Replace with the actual path to your wallpaper.
-exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/your-wallpaper.png
+exec_always --no-startup-id feh --bg-scale ~/Pictures/lost-in-space.png
 
+# Launch the notifier for Caps/Num lock status
+exec_always --no-startup-id ~/.config/i3/scripts/lock-key-notifier.sh
+
+# Set GTK Icons and themes
+exec --no-startup-id gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
+# ---------------------------------------------------------------- #
+# MEDIA KEYS (using pamixer for safe volume control)
+# ---------------------------------------------------------------- #
+# Increase volume and send notification
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5 && ~/.config/i3/scripts/volume-notification.sh
+
+# Decrease volume and send notification
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5 && ~/.config/i3/scripts/volume-notification.sh
+
+# Mute/unmute volume and send notification
+bindsym XF86AudioMute exec --no-startup-id pamixer -t && ~/.config/i3/scripts/volume-notification.sh
+
+# Brightness control
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+ && ~/.config/i3/scripts/brightness-notification.sh
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%- && ~/.config/i3/scripts/brightness-notification.sh
+
+# Media player controls
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86AudioStop exec --no-startup-id playerctl stop
+
+# ================================================================ #
+# RESIZE MODE
+#
+# This mode is entered by pressing $mod+r.
+# ================================================================ #
+mode "resize" {
+    # --- Resize with Vim keys ---
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    # --- Resize with Arrow keys ---
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # --- Exit resize mode ---
+    # Back to our custom "tiling" mode (without extra quotes)
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}

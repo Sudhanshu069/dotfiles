@@ -1,0 +1,35 @@
+/**
+ * ~/.config/rofi/config.rasi
+ *
+ * CORRECTIONS:
+ * - Removed the 'configuration { ... }' wrapper for better compatibility.
+ * - Fixed the kb-cancel keybinding conflict.
+ */
+
+/* Set the modi (modes) to use */
+modi: "window,drun,run,calc";
+
+/* Set the font */
+font: "JetBrainsMono Nerd Font 12";
+
+/* Enable icons */
+show-icons: true;
+icon-theme: "Papirus";
+terminal: "alacritty";
+
+/* Drun mode settings */
+drun-display-format: "{icon} {name}";
+drun-match-fields: "name,generic,exec,categories";
+
+/* Window mode settings */
+window-format: "[{w}] {c} {t}";
+
+/* --- Keybindings (FIXED) --- */
+/* We only use Escape to cancel, removing the conflicting 'Control+c' */
+kb-cancel: "Escape";
+kb-accept-entry: "Return,Control+m";
+kb-mode-next: "Shift+Right,Control+Tab";
+kb-mode-previous: "Shift+Left,Control+Shift+Tab";
+
+/* Import the theme file */
+@theme "~/.config/rofi/theme.rasi"
